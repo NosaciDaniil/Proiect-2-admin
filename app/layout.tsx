@@ -5,6 +5,7 @@ import "./globals.css";
 
 import Providers from "./components/providers";
 import { ModalProvider } from "@/providers/modal-provider";
+import { ToasterProvider } from '@/providers/toast-provider';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,9 +33,10 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Providers>
-          <ModalProvider />
           {children}
         </Providers>
+        <ToasterProvider />
+        <ModalProvider />
       </body>
     </html>
   );
