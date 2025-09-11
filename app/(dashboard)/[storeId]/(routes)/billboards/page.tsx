@@ -1,7 +1,7 @@
 const BillboardsPage = () => {
     return (
         <div>
-            Billboards
+            
         </div>
     );
 }
