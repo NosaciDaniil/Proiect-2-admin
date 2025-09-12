@@ -14,10 +14,8 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import toast, { Toast } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { AlertModal } from "@/components/modals/alert-modal";
-import { ApiAlert } from "@/components/ui/api-alert";
-import { useOrigin } from "@/hooks/use-origin";
 import ImageUpload from "@/components/ui/image-upload";
 
 interface BillboardFormProps {
@@ -36,7 +34,6 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
 }) => {
     const params = useParams();
     const router = useRouter();
-    const origin = useOrigin();
 
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -133,7 +130,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
                         </FormItem>
                     )}
                     />
-                <div className="grid grid-cols-3 gap -8">
+                <div className="grid grid-cols-3 gap-8">
                     <FormField
                     control={form.control}
                     name="label"
@@ -153,7 +150,6 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
                 </Button>
             </form>
         </Form>
-        <Separator />
     </>
     );
 };

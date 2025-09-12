@@ -6,10 +6,13 @@ import { useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
-import { Billboard } from "@prisma/client";
+import { BillboardColumn } from "./columns";
+import { DataTable } from "@/components/ui/data-table";
+import { columns } from "./columns";
+import { ApiList } from "@/components/ui/api-list";
 
 interface BillboardClientProps {
-    data: Billboard[]
+    data: BillboardColumn[]
 }
 
 export const BillboardClient: React.FC<BillboardClientProps> = ({
@@ -34,29 +37,13 @@ export const BillboardClient: React.FC<BillboardClientProps> = ({
                 </Button>
             </div>
             <Separator />
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {data.map((billboard) => (
-                    <div key={billboard.id} className="border rounded-lg p-4">
-                        <div className="aspect-video relative mb-4">
-                            <img 
-                                src={billboard.imageUrl} 
-                                alt={billboard.label}
-                                className="w-full h-full object-cover rounded-md"
-                            />
-                        </div>
-                        <h3 className="font-medium">{billboard.label}</h3>
-                        <div className="flex gap-2 mt-2">
-                            <Button 
-                                variant="outline" 
-                                size="sm"
-                                onClick={() => router.push(`/${storeId}/billboards/${billboard.id}`)}
-                            >
-                                Edit
-                            </Button>
-                        </div>
-                    </div>
-                ))}
-            </div>
+            <DataTable searchKey="label" columns={columns} data={data} />
+            <Heading
+                title="API"
+                description="API calls for Billboards"
+            />
+            <Separator />
+            <ApiList entityName="billboards" entityIdName="billboardId" />
         </>
     )
 }
