@@ -55,6 +55,7 @@ export default function StoreSwitcher({
                     aria-expanded={open}
                     aria-label="Select a store"
                     className={cn("w-[200px] justify-between", className)}
+                    suppressHydrationWarning
                 >
 
                     <StoreIcon className="mr-2 h-4 w-4" />
