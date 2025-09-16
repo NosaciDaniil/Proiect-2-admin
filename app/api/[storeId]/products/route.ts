@@ -4,11 +4,12 @@ import { auth } from "@clerk/nextjs/server";
 
 export async function POST(
     req: Request,
-    { params }: { params: { storeId: string } }
+    { params }: { params: Promise<{ storeId: string }> }
 ) {
     try {
         const { userId } = await auth();
         const body = await req.json();
+        const { storeId } = await params;
 
         const { name, price, categoryId, sizeId, colorId, images, isFeatured, isArchived } = body;
 
@@ -40,13 +41,13 @@ export async function POST(
             return new NextResponse("Color id is required", { status: 400 });
         }
 
-        if (!params.storeId) {
+        if (!storeId) {
             return new NextResponse("Store id is required", { status: 400 });
         }
 
         const storeByUserId = await prismadb.store.findFirst({
             where: {
-                id: params.storeId,
+                id: storeId,
                 userId,
             }
         });
@@ -64,7 +65,7 @@ export async function POST(
                 categoryId,
                 sizeId,
                 colorId,
-                storeId: params.storeId,
+                storeId: storeId,
                 images: {
                     createMany: {
                         data: [
@@ -84,18 +85,19 @@ export async function POST(
 
 export async function GET(
     req: Request,
-    { params }: { params: { storeId: string } }
+    { params }: { params: Promise<{ storeId: string }> }
 ) {
     try {
-        console.log(`[PRODUCTS_GET] API called for store: ${params.storeId}`);
+        const { storeId } = await params;
+        console.log(`[PRODUCTS_GET] API called for store: ${storeId}`);
         
-        if (!params.storeId) {
+        if (!storeId) {
             return new NextResponse("Store id is required", { status: 400 });
         }
 
         const products = await prismadb.product.findMany({
             where: {
-                storeId: params.storeId,
+                storeId: storeId,
                 isArchived: false,
             },
             include: {
@@ -109,7 +111,7 @@ export async function GET(
             }
         });
 
-        console.log(`[PRODUCTS_GET] Found ${products.length} products for store ${params.storeId}`);
+        console.log(`[PRODUCTS_GET] Found ${products.length} products for store ${storeId}`);
         return NextResponse.json(products);
     } catch (error) {
         console.log('[PRODUCTS_GET] Error:', error);
