@@ -89,17 +89,27 @@ export async function GET(
 ) {
     try {
         const { storeId } = await params;
-        console.log(`[PRODUCTS_GET] API called for store: ${storeId}`);
+        const { searchParams } = new URL(req.url);
+        const isFeatured = searchParams.get('isFeatured');
+        
+        console.log(`[PRODUCTS_GET] API called for store: ${storeId}, isFeatured: ${isFeatured}`);
         
         if (!storeId) {
             return new NextResponse("Store id is required", { status: 400 });
         }
 
+        const whereClause: any = {
+            storeId: storeId,
+            isArchived: false,
+        };
+
+        // Add isFeatured filter if specified
+        if (isFeatured === 'true') {
+            whereClause.isFeatured = true;
+        }
+
         const products = await prismadb.product.findMany({
-            where: {
-                storeId: storeId,
-                isArchived: false,
-            },
+            where: whereClause,
             include: {
                 images: true,
                 category: true,
